@@ -34,14 +34,87 @@ while(fread(&s,sizeof(s),1,fp));
 
 }
 void searchStudent(){
+    FILE *fp;
+    fp=fopen(FULL_NAME,"rb");
+    struct student s;
+    int roll,found=0;
+    printf("enter the roll number for search studen\n");
+    scanf("%d",&roll);
 
+    while(fread(&s,sizeof(s),1,fp))
+    {
+
+        if(s.roll==roll){
+            printf("\n student found \n");
+            printf("name =%s\nmarks=%.2f\n",s.name,s.marks);
+            found=1;
+            break;
+        }
+    }
+    if(!found){
+        printf("student not found!! ");
+
+    }
 }
 void updateStudent(){
+    FILE *fp;
+    fp=fopen(FULL_NAME,"rb+");
+    struct student s;
+    int roll,found=0;
+    printf("enter the roll for update the student ");
+    scanf("%d",&roll);
+    while(fread(&s,sizeof(s),1,fp)){
+        if(s.roll==roll){
+            printf("enter the name \n");
+            scanf("%s",s.name);
+        printf("enter the marks");
+        scanf("%f",s.marks);
+        fseek(fp,-sizeof(s),SEEK_CUR);
+        fwrite(&s,sizeof(s),1,fp);
+        printf("student data is successfully updated\n ");
+        found=1;
+        break ;
 
-}
+        }
+    }if(!found)
+        printf("not found !!");
+        fclose(fp);
+
+
+    }
+
+
+
 void delateStudent(){
+    FILE *fp,*temp;
+    fp=fopen(FULL_NAME,"rb");
+    temp=fopen("temp.dat","wb");
+    struct student s;
+    int roll,found=1;
+    printf("enter the roll no. for delate the that student data");
+    scanf("%d",&roll);
+    while(fread(&s,sizeof(s),1,fp)){
+        if(s.roll==roll){
+            found=1;
+        }
+        else{ 
+        printf("student not found");
 
+        
+    }
 }
+fclose(fp);
+fclose(temp);
+remove(FULL_NAME);
+rename("temp.dat",FULL_NAME);
+if(found)
+printf("student delated !");
+else {
+    printf("student not found ");
+}
+
+    }
+
 int main(){
 
     int choice ;
@@ -62,7 +135,7 @@ switch(choice){
     break;
     case 6:exit(0);
     default: 
-    printf("enter only from above option");
+    printf("invalid choice !");
 }
         }
     return 0;
