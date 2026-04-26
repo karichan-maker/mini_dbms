@@ -25,7 +25,12 @@ void addStudent(){
 
 }
 void viewStudent(){
-
+FILE *fp=fopen(FULL_NAME,"rb");
+struct student s;
+while(fread(&s,sizeof(s),1,fp));
+{
+    printf("roll=%d \n name =%s \n marks=%.2f\n",s.roll,s.name,s.marks);
+}fclose(fp);
 
 }
 void searchStudent(){
