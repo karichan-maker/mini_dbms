@@ -27,6 +27,7 @@ void addStudent(){
 void viewStudent(){
 FILE *fp=fopen(FULL_NAME,"rb");
 struct student s;
+printf(" _____student list _____\n");
 while(fread(&s,sizeof(s),1,fp));
 {
     printf("roll=%d \n name =%s \n marks=%.2f\n",s.roll,s.name,s.marks);
@@ -52,45 +53,47 @@ void searchStudent(){
         }
     }
     if(!found){
-        printf("student not found!! ");
+        printf("student not found!!\n ");
 
     }
 }
-void updateStudent(){
-    FILE *fp;
-    fp=fopen(FULL_NAME,"rb+");
+void updateStudent()
+{
+
+    FILE *fp=fopen(FULL_NAME,"rb+");
     struct student s;
     int roll,found=0;
-    printf("enter the roll for update the student ");
-    scanf("%d",&roll);
-    while(fread(&s,sizeof(s),1,fp)){
+    printf("Enter the roll to update the student ");
+    scanf("%d",&roll); 
+        while(fread(&s,sizeof(s),1,fp))
+{
         if(s.roll==roll){
-            printf("enter the name \n");
-            scanf("%s",s.name);
-        printf("enter the marks");
-        scanf("%f",s.marks);
+        printf("enter new name \n");
+        scanf("%s",s.name);
+        printf("enter new marks\n");
+        scanf("%f",&s.marks);
         fseek(fp,-sizeof(s),SEEK_CUR);
         fwrite(&s,sizeof(s),1,fp);
         printf("student data is successfully updated\n ");
         found=1;
-        break ;
+        break;
 
         }
-    }if(!found)
-        printf("not found !!");
-        fclose(fp);
-
-
     }
-
-
+        if(!found)
+        {
+        printf(" Student not found !!");
+        }
+        fclose(fp);
+    
+}
 
 void delateStudent(){
-    FILE *fp,*temp;
-    fp=fopen(FULL_NAME,"rb");
-    temp=fopen("temp.dat","wb");
+    
+    FILE  *fp=fopen(FULL_NAME,"rb");
+    FILE  *temp=fopen("temp.dat","wb");
     struct student s;
-    int roll,found=1;
+    int roll,found=0;
     printf("enter the roll no. for delate the that student data");
     scanf("%d",&roll);
     while(fread(&s,sizeof(s),1,fp)){
@@ -98,28 +101,28 @@ void delateStudent(){
             found=1;
         }
         else{ 
-        printf("student not found");
-
+        fwrite(&s,sizeof(s),1,temp);
+        }
         
     }
-}
+
 fclose(fp);
 fclose(temp);
 remove(FULL_NAME);
 rename("temp.dat",FULL_NAME);
-if(found)
-printf("student delated !");
-else {
-    printf("student not found ");
-}
+    if(found)
+        printf("student delated !");
+   else 
+        printf("student not found ");
 
-    }
+
+}
 
 int main(){
 
     int choice ;
     while(1){
-        printf(" 1.Add student \n2. view stident \n 3.View student \n 4. Update student \n 5.Delate student \n 6.Exit\n ");
+        printf(" 1.Add student \n2. view stident \n 3.search  student \n 4. Update student \n 5.Delate student \n 6.Exit\n ");
 printf("enter your choice :");
 scanf("%d",&choice);
 switch(choice){
@@ -129,7 +132,7 @@ switch(choice){
     break;
     case 3:searchStudent();
     break;
-    case 4: updateStudent();
+    case 4:updateStudent();
     break;
     case 5:delateStudent();
     break;
@@ -137,6 +140,6 @@ switch(choice){
     default: 
     printf("invalid choice !");
 }
-        }
+}
     return 0;
 }
